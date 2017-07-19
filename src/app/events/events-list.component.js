@@ -9,30 +9,27 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 var core_1 = require("@angular/core");
+var event_service_1 = require("./shared/event.service");
+var toastr_service_1 = require("../common/toastr.service");
 var EventsListComponent = (function () {
-    function EventsListComponent() {
-        this.event1 = {
-            id: 1,
-            name: 'Angular Connect',
-            date: '9/12/2007',
-            time: '10:00 am',
-            price: 599.99,
-            imageUrl: 'app/assets/images/angularconnect-shield.png',
-            location: {
-                address: '1057 DT',
-                city: 'London',
-                country: 'England'
-            }
-        };
+    function EventsListComponent(eventService, toastr) {
+        this.eventService = eventService;
+        this.toastr = toastr;
     }
+    EventsListComponent.prototype.ngOnInit = function () {
+        this.events = this.eventService.getEvents();
+    };
+    EventsListComponent.prototype.handleThumbnailClick = function (eventName) {
+        this.toastr.success(eventName);
+    };
     return EventsListComponent;
 }());
 EventsListComponent = __decorate([
     core_1.Component({
         selector: 'events-list',
-        template: "\n        <div>\n        <h1> Upcoming Angular 2 Events </h1>\n        <hr/>\n        <event-thumbnail [event] = \"event1\"></event-thumbnail>\n        </div> \n            "
+        template: "\n        <div>\n        <h1> Upcoming Angular 2 Events </h1>\n        <hr/>\n        <div class =\"row\">\n            <div *ngFor=\"let event of events\" class=\"col-md-5\">\n                <event-thumbnail (click)=\"handleThumbnailClick(event.name)\"[event] = \"event\"></event-thumbnail>\n\n            </div>\n        </div>\n        </div> \n            "
     }),
-    __metadata("design:paramtypes", [])
+    __metadata("design:paramtypes", [event_service_1.EventService, toastr_service_1.ToastService])
 ], EventsListComponent);
 exports.EventsListComponent = EventsListComponent;
 //# sourceMappingURL=events-list.component.js.map
